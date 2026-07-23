@@ -1,3 +1,5 @@
+前端react 后端go语言全栈开发project
+
 1、打包命令
 在所在的项目目录下执行
 cd D:\GolandProjects
