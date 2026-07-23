@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// 初始化日志开发环境 dev localmaster master 这三种环境
-	logger.Init("localmaster")
+	logger.Init("dev")
 	defer logger.Log.Sync()
 
 	// 2. 启动后台定时任务
@@ -49,6 +49,9 @@ func main() {
 	r.PUT("/api/tasks/update/:id", handler.UpdateTaskAPI)
 	// 删除 DELETE
 	r.DELETE("/api/tasks/delete/:id", handler.DeleteTaskAPI)
+
+	// 测试统一返回数据格式
+	r.GET("/api/tasks/response/page", handler.GetTaskResponsePageAPI)
 
 	// 文件上传、下载、预览路由
 	r.POST("/api/files/upload", handler.UploadFileAPI)              // 上传文件
