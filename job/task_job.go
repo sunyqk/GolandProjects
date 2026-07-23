@@ -1,8 +1,11 @@
 package job
 
 import (
+	"GolandProjects/pkg/logger"
 	"fmt"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 func StartTaskMonitor() {
@@ -22,6 +25,15 @@ func StartTaskMonitor() {
 
 			// 这里调用你的业务逻辑
 			// service.CreateTask()
+
+			// 测试模拟全局日志配置
+			simulateBusinessLogic()
 		}
 	}()
+}
+
+func simulateBusinessLogic() {
+	name := "张三"
+	// 上述要是输入日志系统中需要用 zap.String() , 或其他数据结构来转换
+	logger.Info("测试全局日志系统已经启动..............", zap.String("name", name))
 }

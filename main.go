@@ -4,6 +4,7 @@ import (
 	"GolandProjects/config"
 	"GolandProjects/handler"
 	"GolandProjects/job"
+	"GolandProjects/pkg/logger"
 	"GolandProjects/router"
 	"fmt"
 )
@@ -27,6 +28,10 @@ func main() {
 		// 处理错误，例如IP格式不正确
 		panic(err)
 	}
+
+	// 初始化日志开发环境 dev localmaster master 这三种环境
+	logger.Init("localmaster")
+	defer logger.Log.Sync()
 
 	// 2. 启动后台定时任务
 	// 因为它内部开启了 goroutine，所以这里会立即返回，不会卡住程序
