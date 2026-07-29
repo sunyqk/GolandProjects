@@ -2,6 +2,7 @@ package handler
 
 import (
 	"GolandProjects/model"
+	"GolandProjects/pkg/response"
 	"GolandProjects/repository"
 	"GolandProjects/service"
 	"errors"
@@ -125,6 +126,37 @@ func DeleteTaskAPI(c *gin.Context) {
 		"code": 200,
 		"msg":  "删除成功",
 	})
+}
+
+// 测试统一封装返回数据结构接口
+func GetTaskResponsePageAPI(c *gin.Context) {
+	// 1. 解析分页参数
+	pageStr := c.DefaultQuery("page", "1")
+	sizeStr := c.DefaultQuery("pageSize", "10")
+	page, _ := strconv.Atoi(pageStr)
+	pageSize, _ := strconv.Atoi(sizeStr)
+
+	// 2. 解析查询条件
+	taskName := c.Query("taskName")
+	createAt := c.QueryArray("createAt")
+
+	// 3. 调用 Repository 获取数据
+	tasks, total, err := repository.GetTaskList(page, pageSize, taskName, createAt)
+	if err != nil {
+		// 失败时使用统一的错误返回
+		response.Fail(c, http.StatusInternalServerError, 50001, "查询任务列表失败")
+		return
+	}
+
+	// 4. 组装分页数据并使用统一格式返回
+	pageData := response.PageData{
+		List:     tasks,
+		Total:    total,
+		Page:     page,
+		PageSize: pageSize,
+	}
+
+	response.Success(c, pageData)
 }
 
 // 定义一个全局的错误变量，用于表示记录未找到
